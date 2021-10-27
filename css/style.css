@@ -5,6 +5,65 @@ body {
   justify-content: center;
   margin-top: 120px;
 }
+.canvas-wrapper {
+  display: flex;
+  align-items: flex-end;
+}
+.score-wrapper {
+  margin-left: 20px;
+}
+.top-score {
+  color: white;
+  font-family: "Press Start 2P";
+  margin: 0 0 20px 0;
+}
+.score {
+  color: white;
+  font-family: "Press Start 2P";
+  margin: 0;
+}
 #gameCanvas {
   border: 0.2rem solid #fff;
+}
+#statisticsCanvas {
+  border: 0.2rem solid #fff;
+  margin-right: 20px;
+}
+.game-alert {
+  text-align: center;
+  width: 320px;
+  height: 200px;
+  position: absolute;
+  background-color: black;
+  border-radius: 5px;
+  margin-left: 3px;
+}
+.gameCanvas-wrapper {
+  display: flex;
+  align-items: center;
+}
+.display-none {
+  display: none;
+}
+.alert-title {
+  font-family: "Press Start 2P";
+  font-size: 26px;
+  color: white;
+}
+.alert-score {
+  font-family: "Press Start 2P";
+  font-size: 16px;
+  color: white;
+}
+.alert-button {
+  font-family: "Press Start 2P";
+  font-size: 10px;
+  width: 135px;
+  height: 35px;
+  cursor: pointer;
+  background-color: rgb(30, 153, 190);
+  border: none;
+}
+.alert-button:active {
+  transform: scale(0.98);
 }

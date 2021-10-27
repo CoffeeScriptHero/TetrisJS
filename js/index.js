@@ -1,3 +1,10 @@
+import {
+  updateScore,
+  clearStatisticsField,
+  refreshStatistics,
+} from "./statistics.js";
+import { tetrominos, colors, gameAlert, button } from "./constants.js";
+
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
 const cell = 32;
@@ -10,62 +17,31 @@ let gameOver = false;
 const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
 theme.volume = 0.05;
-// theme.play();
+theme.play();
 
-for (let row = -2; row < canvas.height / 32; row++) {
-  field[row] = [];
-  for (let col = 0; col < canvas.width / 32; col++) {
-    field[row][col] = 0;
+button.addEventListener("click", () => {
+  gameAlert.classList.add("display-none");
+  field = [];
+  fillField();
+  tSequence = [];
+  count = 0;
+  gameOver = false;
+  refreshStatistics();
+  clearStatisticsField();
+  tetromino = getNextTetromino();
+  RAF = requestAnimationFrame(gameLoop);
+});
+
+const fillField = () => {
+  for (let row = -2; row < canvas.height / 32; row++) {
+    field[row] = [];
+    for (let col = 0; col < canvas.width / 32; col++) {
+      field[row][col] = 0;
+    }
   }
-}
-
-const tetrominos = {
-  I: [
-    [0, 0, 0, 0],
-    [1, 1, 1, 1],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ],
-  J: [
-    [1, 0, 0],
-    [1, 1, 1],
-    [0, 0, 0],
-  ],
-  L: [
-    [0, 0, 1],
-    [1, 1, 1],
-    [0, 0, 0],
-  ],
-  O: [
-    [1, 1],
-    [1, 1],
-  ],
-  S: [
-    [0, 1, 1],
-    [1, 1, 0],
-    [0, 0, 0],
-  ],
-  Z: [
-    [1, 1, 0],
-    [0, 1, 1],
-    [0, 0, 0],
-  ],
-  T: [
-    [0, 1, 0],
-    [1, 1, 1],
-    [0, 0, 0],
-  ],
 };
 
-const colors = {
-  I: "cyan",
-  O: "yellow",
-  T: "purple",
-  S: "green",
-  Z: "red",
-  J: "blue",
-  L: "orange",
-};
+fillField();
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -138,6 +114,8 @@ const isValidMove = (matrix, cellRow, cellCol) => {
 };
 
 const placeTetromino = () => {
+  updateScore(tetromino.name);
+
   for (let row = 0; row < tetromino.matrix.length; row++) {
     for (let col = 0; col < tetromino.matrix[row].length; col++) {
       if (tetromino.matrix[row][col]) {
@@ -166,7 +144,7 @@ const placeTetromino = () => {
 const showGameOver = () => {
   cancelAnimationFrame(RAF);
   gameOver = true;
-  console.log("game over");
+  gameAlert.classList.remove("display-none");
 };
 
 const gameLoop = () => {
@@ -226,7 +204,7 @@ document.addEventListener("keydown", (e) => {
     }
   }
 
-  if (e.key === "ArrowUp") {
+  if (e.key === "ArrowUp" && !e.repeat) {
     const matrix = transponseMatrix(tetromino.matrix);
     if (isValidMove(matrix, tetromino.row, tetromino.col)) {
       tetromino.matrix = matrix;
@@ -242,10 +220,10 @@ document.addEventListener("keydown", (e) => {
     }
     tetromino.row = row;
   }
-  if (e.key === " ") {
+  if (e.key === " " && !e.repeat) {
     for (let row = tetromino.row; row < field.length; row++) {
       tetromino.row = row - 1;
-      if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
+      if (!isValidMove(tetromino.matrix, row, tetromino.col) && field[0]) {
         placeTetromino();
         return;
       }
@@ -254,3 +232,11 @@ document.addEventListener("keydown", (e) => {
 });
 
 RAF = requestAnimationFrame(gameLoop);
+
+const promise1 = new Promise((resolve, reject) => {
+  resolve("Success!");
+});
+
+promise1.then((value) => {
+  console.log(value);
+});
