@@ -53,7 +53,7 @@ const addScore = (num) => {
   return (num < 10 ? "00" : num < 100 ? "0" : "") + num;
 };
 
-export const updateScore = (name) => {
+export const updateStatisticsScore = (name) => {
   counters[name] = addScore(parseInt(counters[name]) + 1);
   clearStatisticsField();
 };

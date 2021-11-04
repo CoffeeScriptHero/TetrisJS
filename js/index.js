@@ -1,9 +1,30 @@
 import {
-  updateScore,
+  updateStatisticsScore,
   clearStatisticsField,
   refreshStatistics,
 } from "./statistics.js";
+// import { updateScore } from "./score.js";
 import { tetrominos, colors, gameAlert, button } from "./constants.js";
+const scoreElement = document.querySelector(".score");
+
+export const updateScore = (num) => {
+  let score = parseInt(scoreElement.textContent);
+  const sum = score + num;
+  if (sum < 10) {
+    score = "00000" + sum;
+  } else if (sum < 100) {
+    score = "0000" + sum;
+  } else if (sum < 1000) {
+    score = "000" + sum;
+  } else if (sum < 10000) {
+    score = "00" + sum;
+  } else if (sum < 100000) {
+    score = "0" + sum;
+  } else {
+    score += num;
+  }
+  scoreElement.textContent = score;
+};
 
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
@@ -12,6 +33,7 @@ let field = [];
 let tSequence = [];
 let RAF = null;
 let count = 0;
+const possibleScores = [3, 4, 5, 6];
 let gameOver = false;
 
 const theme = new Audio("../audio/theme.mp3");
@@ -114,8 +136,7 @@ const isValidMove = (matrix, cellRow, cellCol) => {
 };
 
 const placeTetromino = () => {
-  updateScore(tetromino.name);
-
+  updateStatisticsScore(tetromino.name);
   for (let row = 0; row < tetromino.matrix.length; row++) {
     for (let col = 0; col < tetromino.matrix[row].length; col++) {
       if (tetromino.matrix[row][col]) {
@@ -126,6 +147,9 @@ const placeTetromino = () => {
       }
     }
   }
+  const score = possibleScores[getRandomInt(0, possibleScores.length - 1)];
+
+  updateScore(score);
 
   for (let row = field.length - 1; row >= 0; ) {
     if (field[row].every((rowCell) => !!rowCell)) {
@@ -145,6 +169,9 @@ const showGameOver = () => {
   cancelAnimationFrame(RAF);
   gameOver = true;
   gameAlert.classList.remove("display-none");
+  const score = document.querySelector(".score");
+  const alertScore = document.querySelector(".alert-score");
+  alertScore.textContent = score.textContent;
 };
 
 const gameLoop = () => {
@@ -232,11 +259,3 @@ document.addEventListener("keydown", (e) => {
 });
 
 RAF = requestAnimationFrame(gameLoop);
-
-const promise1 = new Promise((resolve, reject) => {
-  resolve("Success!");
-});
-
-promise1.then((value) => {
-  console.log(value);
-});

@@ -12,15 +12,17 @@ body {
 .score-wrapper {
   margin-left: 20px;
 }
-.top-score {
+.top-score-text {
   color: white;
   font-family: "Press Start 2P";
   margin: 0 0 20px 0;
+  letter-spacing: 2px;
 }
-.score {
+.score-text {
   color: white;
   font-family: "Press Start 2P";
   margin: 0;
+  letter-spacing: 2px;
 }
 #gameCanvas {
   border: 0.2rem solid #fff;
@@ -35,7 +37,6 @@ body {
   height: 200px;
   position: absolute;
   background-color: black;
-  border-radius: 5px;
   margin-left: 3px;
 }
 .gameCanvas-wrapper {
@@ -50,12 +51,14 @@ body {
   font-size: 26px;
   color: white;
 }
-.alert-score {
+.alert-score-text {
   font-family: "Press Start 2P";
   font-size: 16px;
   color: white;
+  margin: 0;
 }
 .alert-button {
+  margin-top: 26px;
   font-family: "Press Start 2P";
   font-size: 10px;
   width: 135px;

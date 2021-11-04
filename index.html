@@ -15,7 +15,7 @@
     <title>TetrisJS</title>
   </head>
   <body>
-    <!-- <div class="container"> -->
+    <p class="lines-number">Lines -</p>
     <div class="canvas-wrapper">
       <div>
         <canvas
@@ -30,16 +30,23 @@
         </canvas>
         <div class="game-alert display-none">
           <p class="alert-title">Game over</p>
-          <p class="alert-score">Score: 0</p>
+          <p class="alert-score-text">
+            Score: <span class="alert-score">0</span>
+          </p>
           <button class="alert-button">Play again</button>
         </div>
       </div>
     </div>
     <div class="score-wrapper">
-      <p class="top-score">Top score: 0</p>
-      <p class="score">Score: 0</p>
+      <p class="top-score-text">
+        TOP SCORE: <br />
+        <span class="top-score">000000</span>
+      </p>
+      <p class="score-text">
+        SCORE: <br />
+        <span class="score">000000</span>
+      </p>
     </div>
-    <!-- </div> -->
     <script src="js/index.js" type="module"></script>
   </body>
 </html>
