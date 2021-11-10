@@ -47,4 +47,9 @@ export const colors = {
 };
 
 export const gameAlert = document.querySelector(".game-alert");
-export const button = document.getElementsByClassName("alert-button")[0];
+export const button = document.querySelector(".alert-button");
+export const linesScore = document.querySelector(".lines-score");
+export const record = document.querySelector(".alert-record");
+export const score = document.querySelector(".score");
+export const topScore = document.querySelector(".top-score");
+export const alertScore = document.querySelector(".alert-score");

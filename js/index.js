@@ -3,28 +3,18 @@ import {
   clearStatisticsField,
   refreshStatistics,
 } from "./statistics.js";
-// import { updateScore } from "./score.js";
-import { tetrominos, colors, gameAlert, button } from "./constants.js";
-const scoreElement = document.querySelector(".score");
 
-export const updateScore = (num) => {
-  let score = parseInt(scoreElement.textContent);
-  const sum = score + num;
-  if (sum < 10) {
-    score = "00000" + sum;
-  } else if (sum < 100) {
-    score = "0000" + sum;
-  } else if (sum < 1000) {
-    score = "000" + sum;
-  } else if (sum < 10000) {
-    score = "00" + sum;
-  } else if (sum < 100000) {
-    score = "0" + sum;
-  } else {
-    score += num;
-  }
-  scoreElement.textContent = score;
-};
+import {
+  tetrominos,
+  colors,
+  gameAlert,
+  linesScore,
+  button,
+  score,
+  alertScore,
+  topScore,
+  record,
+} from "./constants.js";
 
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
@@ -34,19 +24,26 @@ let tSequence = [];
 let RAF = null;
 let count = 0;
 const possibleScores = [3, 4, 5, 6];
+let localTopScore = localStorage.getItem("Top-score") || "000000";
 let gameOver = false;
+
+topScore.textContent = localTopScore;
 
 const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
-theme.volume = 0.05;
-theme.play();
+// theme.volume = 0.05;
+// theme.play();
 
 button.addEventListener("click", () => {
   gameAlert.classList.add("display-none");
+  button.classList.add("alert-button--mgtop");
+  record.classList.add("display-none");
   field = [];
   fillField();
   tSequence = [];
   count = 0;
+  score.textContent = "000000";
+  localTopScore = localStorage.getItem("Top-score");
   gameOver = false;
   refreshStatistics();
   clearStatisticsField();
@@ -64,6 +61,36 @@ const fillField = () => {
 };
 
 fillField();
+
+const updateLinesScore = (num) => {};
+
+const updateScore = (num) => {
+  let currentScore = parseInt(score.textContent);
+  const sum = currentScore + num;
+  if (sum < 10) {
+    currentScore = "00000" + sum;
+  } else if (sum < 100) {
+    currentScore = "0000" + sum;
+  } else if (sum < 1000) {
+    currentScore = "000" + sum;
+  } else if (sum < 10000) {
+    currentScore = "00" + sum;
+  } else if (sum < 100000) {
+    currentScore = "0" + sum;
+  } else {
+    currentScore += num;
+  }
+  score.textContent = currentScore;
+};
+
+const checkRecord = () => {
+  const scoreText = score.textContent;
+  const scoreNumber = parseInt(scoreText);
+  if (parseInt(localTopScore) < scoreNumber) {
+    topScore.textContent = scoreText;
+    return true;
+  }
+};
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -148,8 +175,8 @@ const placeTetromino = () => {
     }
   }
   const score = possibleScores[getRandomInt(0, possibleScores.length - 1)];
-
   updateScore(score);
+  checkRecord();
 
   for (let row = field.length - 1; row >= 0; ) {
     if (field[row].every((rowCell) => !!rowCell)) {
@@ -169,9 +196,13 @@ const showGameOver = () => {
   cancelAnimationFrame(RAF);
   gameOver = true;
   gameAlert.classList.remove("display-none");
-  const score = document.querySelector(".score");
-  const alertScore = document.querySelector(".alert-score");
-  alertScore.textContent = score.textContent;
+  const scoreText = score.textContent;
+  alertScore.textContent = scoreText;
+  if (checkRecord()) {
+    record.classList.remove("display-none");
+    button.classList.remove("alert-button--mgtop");
+    localStorage.setItem("Top-score", scoreText);
+  }
 };
 
 const gameLoop = () => {

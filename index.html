@@ -15,7 +15,6 @@
     <title>TetrisJS</title>
   </head>
   <body>
-    <p class="lines-number">Lines -</p>
     <div class="canvas-wrapper">
       <div>
         <canvas
@@ -26,6 +25,11 @@
         ></canvas>
       </div>
       <div class="gameCanvas-wrapper">
+        <div class="lines-wrapper">
+          <p class="lines-number">
+            LINES - <span class="lines-score">000</span>
+          </p>
+        </div>
         <canvas id="gameCanvas" class="gameCanvas" width="320" height="640">
         </canvas>
         <div class="game-alert display-none">
@@ -33,7 +37,8 @@
           <p class="alert-score-text">
             Score: <span class="alert-score">0</span>
           </p>
-          <button class="alert-button">Play again</button>
+          <p class="alert-record display-none">NEW RECORD!</p>
+          <button class="alert-button alert-button--mgtop">Play again</button>
         </div>
       </div>
     </div>

@@ -9,8 +9,17 @@ body {
   display: flex;
   align-items: flex-end;
 }
+.lines-wrapper {
+  text-align: center;
+}
+.lines-number {
+  color: white;
+  font-family: "Press Start 2P";
+}
 .score-wrapper {
   margin-left: 20px;
+  margin-top: 50px;
+  font-size: 16px;
 }
 .top-score-text {
   color: white;
@@ -32,33 +41,40 @@ body {
   margin-right: 20px;
 }
 .game-alert {
+  font-family: "Press Start 2P";
   text-align: center;
   width: 320px;
-  height: 200px;
+  height: 210px;
   position: absolute;
-  background-color: black;
+  background-color: BLACK;
   margin-left: 3px;
 }
 .gameCanvas-wrapper {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 .display-none {
   display: none;
 }
 .alert-title {
-  font-family: "Press Start 2P";
   font-size: 26px;
   color: white;
+  color: rgba(0, 255, 255, 0.5);
 }
 .alert-score-text {
-  font-family: "Press Start 2P";
   font-size: 16px;
   color: white;
   margin: 0;
 }
+.alert-record {
+  font-size: 14px;
+  color: red;
+  margin-bottom: 20px;
+}
 .alert-button {
-  margin-top: 26px;
+  display: block;
+  margin: 0 auto;
   font-family: "Press Start 2P";
   font-size: 10px;
   width: 135px;
@@ -66,6 +82,9 @@ body {
   cursor: pointer;
   background-color: rgb(30, 153, 190);
   border: none;
+}
+.alert-button--mgtop {
+  margin-top: 35px;
 }
 .alert-button:active {
   transform: scale(0.98);
