@@ -5,6 +5,11 @@ body {
   justify-content: center;
   margin-top: 120px;
 }
+@media (max-width: 1600px) {
+  body {
+    margin: 0;
+  }
+}
 .canvas-wrapper {
   display: flex;
   align-items: flex-end;

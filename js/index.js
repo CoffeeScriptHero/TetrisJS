@@ -31,8 +31,8 @@ topScore.textContent = localTopScore;
 
 const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
-// theme.volume = 0.05;
-// theme.play();
+theme.volume = 0.05;
+theme.play();
 
 button.addEventListener("click", () => {
   gameAlert.classList.add("display-none");
@@ -43,6 +43,7 @@ button.addEventListener("click", () => {
   tSequence = [];
   count = 0;
   score.textContent = "000000";
+  linesScore.textContent = "000";
   localTopScore = localStorage.getItem("Top-score");
   gameOver = false;
   refreshStatistics();
@@ -62,7 +63,17 @@ const fillField = () => {
 
 fillField();
 
-const updateLinesScore = (num) => {};
+const updateLinesScore = () => {
+  let currentScore = parseInt(linesScore.textContent);
+  currentScore += 1;
+  if (currentScore < 10) {
+    linesScore.textContent = "00" + currentScore;
+  } else if (currentScore < 100) {
+    linesScore.textContent = "0" + currentScore;
+  } else {
+    linesScore.textContent = currentScore;
+  }
+};
 
 const updateScore = (num) => {
   let currentScore = parseInt(score.textContent);
@@ -167,7 +178,7 @@ const placeTetromino = () => {
   for (let row = 0; row < tetromino.matrix.length; row++) {
     for (let col = 0; col < tetromino.matrix[row].length; col++) {
       if (tetromino.matrix[row][col]) {
-        if (tetromino.row + row < 0) {
+        if (tetromino.row + 1 < 0) {
           return showGameOver();
         }
         field[tetromino.row + row][tetromino.col + col] = tetromino.name;
@@ -180,6 +191,7 @@ const placeTetromino = () => {
 
   for (let row = field.length - 1; row >= 0; ) {
     if (field[row].every((rowCell) => !!rowCell)) {
+      updateLinesScore();
       for (let r = row; r >= 0; r--) {
         for (let c = 0; c < field[r].length; c++) {
           field[r][c] = field[r - 1][c];
