@@ -46,6 +46,13 @@ export const colors = {
   L: "orange",
 };
 
+export const customFont = new FontFace(
+  "customFont",
+  "url(fonts/PressStart2P-Regular.otf)"
+);
+
+export const statisticCanvas = document.getElementById("statisticsCanvas");
+export const nextCanvas = document.getElementById("nextCanvas");
 export const gameAlert = document.querySelector(".game-alert");
 export const button = document.querySelector(".alert-button");
 export const linesScore = document.querySelector(".lines-score");

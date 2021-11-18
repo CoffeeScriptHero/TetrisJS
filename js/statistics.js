@@ -1,15 +1,14 @@
-import { colors } from "./constants.js";
+import { colors, customFont, statisticCanvas as canvas } from "./constants.js";
 
-export const canvas = document.getElementById("statisticsCanvas");
 const context = canvas.getContext("2d");
-export const customFont = new FontFace(
-  "customFont",
-  "url(fonts/PressStart2P-Regular.otf)"
-);
 
 customFont.load().then((font) => {
   document.fonts.add(font);
   fillField();
+  context.fillStyle = "white";
+  context.font = "20px customFont";
+  context.textAlign = "center";
+  context.fillText("STATISTICS", canvas.width / 2, 25);
 });
 
 const cell = 22;
@@ -25,37 +24,37 @@ export const counters = {
 };
 
 const field = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, "T", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, "T", "T", "T", 0, 0, 0, 0, 0, "P", 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, "J", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, "J", "J", "J", 0, 0, 0, 0, 0, "P", 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, "Z", "Z", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, "Z", "Z", 0, 0, 0, 0, 0, "P", 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, "O", "O", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, "O", "O", 0, 0, 0, 0, 0, "P", 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, "S", "S", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, "S", "S", 0, 0, 0, 0, 0, 0, "P", 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, "L", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, "L", "L", "L", 0, 0, 0, 0, 0, "P", 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, "I", "I", "I", "I", 0, 0, 0, 0, "P", 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, "T", 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, "T", "T", "T", 0, 0, 0, 0, 0, "P", 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, "J", 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, "J", "J", "J", 0, 0, 0, 0, 0, "P", 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, "Z", "Z", 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, "Z", "Z", 0, 0, 0, 0, 0, "P", 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, "O", "O", 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, "O", "O", 0, 0, 0, 0, 0, "P", 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, "S", "S", 0, 0, 0, 0, 0, 0, 0],
+  [0, "S", "S", 0, 0, 0, 0, 0, 0, "P", 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, "L", 0, 0, 0, 0, 0, 0, 0],
+  [0, "L", "L", "L", 0, 0, 0, 0, 0, "P", 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, "I", "I", "I", "I", 0, 0, 0, 0, "P", 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
 const addScore = (num) => {
   return (num < 10 ? "00" : num < 100 ? "0" : "") + num;
 };
 
-export const updateStatisticsScore = (name) => {
+export const updateScore = (name) => {
   counters[name] = addScore(parseInt(counters[name]) + 1);
-  clearStatisticsField();
+  clearField();
 };
 
 export const refreshStatistics = () => {
@@ -64,16 +63,12 @@ export const refreshStatistics = () => {
   }
 };
 
-export const clearStatisticsField = () => {
-  context.clearRect(0, 0, canvas.height + 400, canvas.width + 400);
+export const clearField = () => {
+  context.clearRect(0, 30, canvas.height + 200, canvas.width + 200);
   fillField();
 };
 
 const fillField = () => {
-  context.fillStyle = "white";
-  context.font = "20px customFont";
-  context.textAlign = "center";
-  context.fillText("STATISTICS", canvas.width / 2, 25);
   for (let row = 0; row < field.length; row++) {
     for (let col = 0; col <= field[row].length; col++) {
       if (field[row][col] && field[row][col] !== "P") {

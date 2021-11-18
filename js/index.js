@@ -1,8 +1,13 @@
 import {
-  updateStatisticsScore,
-  clearStatisticsField,
+  updateScore as updateStatisticsScore,
+  clearField as clearStatisticsField,
   refreshStatistics,
 } from "./statistics.js";
+
+import {
+  clearField as clearNextField,
+  fillField as fillNextField,
+} from "./next.js";
 
 import {
   tetrominos,
@@ -24,15 +29,14 @@ let tSequence = [];
 let RAF = null;
 let count = 0;
 const possibleScores = [3, 4, 5, 6];
+const possibleLineScores = [150, 175, 200];
 let localTopScore = localStorage.getItem("Top-score") || "000000";
 let gameOver = false;
-
 topScore.textContent = localTopScore;
 
 const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
 theme.volume = 0.05;
-theme.play();
 
 button.addEventListener("click", () => {
   gameAlert.classList.add("display-none");
@@ -42,6 +46,8 @@ button.addEventListener("click", () => {
   fillField();
   tSequence = [];
   count = 0;
+  generateSequence();
+  clearNextField();
   score.textContent = "000000";
   linesScore.textContent = "000";
   localTopScore = localStorage.getItem("Top-score");
@@ -120,15 +126,24 @@ const generateSequence = () => {
   }
 };
 
-const getNextTetromino = () => {
-  if (tSequence.length === 0) {
-    generateSequence();
-  }
+generateSequence();
 
+const getNextTetromino = () => {
   const name = tSequence.pop();
   const matrix = tetrominos[name];
   const col = field[0].length / 2 - Math.ceil(matrix[0].length / 2);
   const row = name === "I" ? -1 : -2;
+
+  if (tSequence.length === 0) {
+    generateSequence();
+  }
+  const lastElement = tSequence[tSequence.length - 1];
+
+  clearNextField();
+
+  if (lastElement) {
+    fillNextField(tSequence[tSequence.length - 1]);
+  }
 
   return {
     name: name,
@@ -189,8 +204,11 @@ const placeTetromino = () => {
   updateScore(score);
   checkRecord();
 
+  let scoresToReceive = 0;
+  let rowsCounter = 0;
   for (let row = field.length - 1; row >= 0; ) {
     if (field[row].every((rowCell) => !!rowCell)) {
+      rowsCounter++;
       updateLinesScore();
       for (let r = row; r >= 0; r--) {
         for (let c = 0; c < field[r].length; c++) {
@@ -201,6 +219,18 @@ const placeTetromino = () => {
       row--;
     }
   }
+
+  if (rowsCounter) {
+    let extraPoints = 0;
+    for (let i = 0; i < rowsCounter; i++) {
+      extraPoints += 50;
+      scoresToReceive +=
+        possibleLineScores[getRandomInt(0, possibleLineScores.length - 1)];
+    }
+    scoresToReceive += extraPoints;
+    updateScore(scoresToReceive);
+  }
+
   tetromino = getNextTetromino();
 };
 

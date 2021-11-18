@@ -10,7 +10,7 @@ body {
     margin: 0;
   }
 }
-.canvas-wrapper {
+.main-canvas-wrapper {
   display: flex;
   align-items: flex-end;
 }
@@ -21,7 +21,7 @@ body {
   color: white;
   font-family: "Press Start 2P";
 }
-.score-wrapper {
+.right-statistics-wrapper {
   margin-left: 20px;
   margin-top: 50px;
   font-size: 16px;
@@ -35,15 +35,18 @@ body {
 .score-text {
   color: white;
   font-family: "Press Start 2P";
-  margin: 0;
+  margin: 0 0 41px 0;
   letter-spacing: 2px;
-}
-#gameCanvas {
-  border: 0.2rem solid #fff;
 }
 #statisticsCanvas {
   border: 0.2rem solid #fff;
   margin-right: 20px;
+}
+#gameCanvas {
+  border: 0.2rem solid #fff;
+}
+#nextCanvas {
+  border: 0.2rem solid #fff;
 }
 .game-alert {
   font-family: "Press Start 2P";

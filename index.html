@@ -15,12 +15,12 @@
     <title>TetrisJS</title>
   </head>
   <body>
-    <div class="canvas-wrapper">
-      <div>
+    <div class="main-canvas-wrapper">
+      <div class="statisticsCanvas-wrapper">
         <canvas
           id="statisticsCanvas"
           class="statisticsCanvas"
-          width="242 "
+          width="242"
           height="500"
         ></canvas>
       </div>
@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    <div class="score-wrapper">
+    <div class="right-statistics-wrapper">
       <p class="top-score-text">
         TOP SCORE: <br />
         <span class="top-score">000000</span>
@@ -51,6 +51,9 @@
         SCORE: <br />
         <span class="score">000000</span>
       </p>
+      <div class="nextCanvas-wrapper">
+        <canvas id="nextCanvas" class="nextCanvas" width="150" height="180">
+      </div>
     </div>
     <script src="js/index.js" type="module"></script>
   </body>
