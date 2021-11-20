@@ -36,6 +36,7 @@ topScore.textContent = localTopScore;
 
 const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
+theme.play();
 theme.volume = 0.05;
 
 button.addEventListener("click", () => {
