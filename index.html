@@ -14,7 +14,8 @@
     <link rel="shortcut icon" href="#" type="image/x-icon" />
     <title>TetrisJS</title>
   </head>
-  <body>
+  <body class="body">
+    <div class="game game-hidden game-transition">
     <div class="main-canvas-wrapper">
       <div class="statisticsCanvas-wrapper">
         <canvas
@@ -54,6 +55,7 @@
       <div class="nextCanvas-wrapper">
         <canvas id="nextCanvas" class="nextCanvas" width="150" height="180">
       </div>
+    </div>
     </div>
     <script src="js/index.js" type="module"></script>
   </body>

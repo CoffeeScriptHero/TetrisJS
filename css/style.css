@@ -1,18 +1,39 @@
-body {
+.body {
   background: black;
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+.game {
   margin-top: 120px;
+  display: flex;
+  opacity: 1;
+}
+.game-transition.game-hidden {
+  display: block;
+  opacity: 0;
+}
+.game-hidden {
+  display: none;
+}
+.game-transition {
+  transition: opacity 3s ease-in-out;
+}
+.register-wrapper {
+  font-family: "Press Start 2P";
+  text-align: center;
+  width: 350px;
+  height: 250px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -125px 0 0 -175px;
+  background-color: white;
 }
 @media (max-width: 1600px) {
   body {
     margin: 0;
   }
-}
-.main-canvas-wrapper {
-  display: flex;
-  align-items: flex-end;
 }
 .lines-wrapper {
   text-align: center;
@@ -38,9 +59,16 @@ body {
   margin: 0 0 41px 0;
   letter-spacing: 2px;
 }
+.main-canvas-wrapper {
+  display: flex;
+  align-items: flex-end;
+}
+.statisticsCanvas-wrapper {
+  display: flex;
+  margin-right: 20px;
+}
 #statisticsCanvas {
   border: 0.2rem solid #fff;
-  margin-right: 20px;
 }
 #gameCanvas {
   border: 0.2rem solid #fff;
@@ -96,4 +124,9 @@ body {
 }
 .alert-button:active {
   transform: scale(0.98);
+}
+.l {
+  transition: 0.6s;
+  width: 80px;
+  height: 90px;
 }

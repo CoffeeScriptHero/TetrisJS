@@ -14,12 +14,34 @@ import {
   colors,
   gameAlert,
   linesScore,
-  button,
+  alertButton,
   score,
+  game,
   alertScore,
   topScore,
   record,
 } from "./constants.js";
+import { generateRegistration } from "./registration.js";
+
+// document.querySelector(".l").addEventListener("click", (e) => {
+//   if (game.classList.contains("game-hidden")) {
+//     game.classList.add("game-transition");
+//     game.classList.remove("game-hidden");
+//   } else {
+//     game.classList.add("game-transition");
+//     game.classList.add("game-hidden");
+//   }
+// });
+
+// game.addEventListener("transitioned", () => {
+//   game.classList.remove("game-transition");
+// });
+
+if (localStorage.getItem("id")) {
+  RAF = requestAnimationFrame(gameLoop);
+} else {
+  generateRegistration();
+}
 
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
@@ -39,9 +61,9 @@ theme.loop = true;
 theme.play();
 theme.volume = 0.05;
 
-button.addEventListener("click", () => {
+alertButton.addEventListener("click", () => {
   gameAlert.classList.add("display-none");
-  button.classList.add("alert-button--mgtop");
+  alertButton.classList.add("alert-button--mgtop");
   record.classList.add("display-none");
   field = [];
   fillField();
@@ -235,6 +257,17 @@ const placeTetromino = () => {
   tetromino = getNextTetromino();
 };
 
+const submitScore = async (data) => {
+  const response = await fetch("http://localhost:3000/submit-score", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+};
+
 const showGameOver = () => {
   cancelAnimationFrame(RAF);
   gameOver = true;
@@ -243,9 +276,10 @@ const showGameOver = () => {
   alertScore.textContent = scoreText;
   if (checkRecord()) {
     record.classList.remove("display-none");
-    button.classList.remove("alert-button--mgtop");
+    alertButton.classList.remove("alert-button--mgtop");
     localStorage.setItem("Top-score", scoreText);
   }
+  submitScore({ nickname: "denis", score: 41 }).then((res) => console.log(res));
 };
 
 const gameLoop = () => {
@@ -331,5 +365,3 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
-
-RAF = requestAnimationFrame(gameLoop);

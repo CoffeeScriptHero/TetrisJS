@@ -6,6 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const routes = require("./routes/main");
 const secureRoutes = require("./routes/secure");
+const cors = require("cors");
 
 const URI = process.env.MONGO_CONNECTION_URL;
 
@@ -15,6 +16,8 @@ mongoose
   .catch((err) => console.error(err));
 
 const app = express();
+
+app.use(cors({ origin: "*" }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -31,8 +34,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-
-  res.json({ error: err });
+  res.json({ error: err, message: "все поломалось..." });
 });
 
 app.listen(process.env.PORT || 3000, () => {

@@ -51,12 +51,14 @@ export const customFont = new FontFace(
   "url(fonts/PressStart2P-Regular.otf)"
 );
 
+export const game = document.querySelector(".game");
 export const statisticCanvas = document.getElementById("statisticsCanvas");
 export const nextCanvas = document.getElementById("nextCanvas");
 export const gameAlert = document.querySelector(".game-alert");
-export const button = document.querySelector(".alert-button");
+export const alertButton = document.querySelector(".alert-button");
 export const linesScore = document.querySelector(".lines-score");
 export const record = document.querySelector(".alert-record");
 export const score = document.querySelector(".score");
 export const topScore = document.querySelector(".top-score");
 export const alertScore = document.querySelector(".alert-score");
+export const regButton = document.querySelector(".registration-button");
