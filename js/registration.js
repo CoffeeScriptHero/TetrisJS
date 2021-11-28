@@ -17,7 +17,16 @@ export const generateRegistration = () => {
   const input = document.querySelector(".input");
   console.log(registrationWrapper);
   regButton.addEventListener("click", (e) => {
-    game.classList.remove("display-none");
-    document.querySelector(".register-wrapper").remove();
+    if (game.classList.contains("game-hidden")) {
+      game.classList.add("game-transition");
+      game.classList.remove("game-hidden");
+    } else {
+      game.classList.add("game-transition");
+      game.classList.add("game-hidden");
+    }
+  });
+
+  game.addEventListener("transitioned", () => {
+    game.classList.remove("game-transition");
   });
 };

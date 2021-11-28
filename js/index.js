@@ -37,11 +37,12 @@ import { generateRegistration } from "./registration.js";
 //   game.classList.remove("game-transition");
 // });
 
-if (localStorage.getItem("id")) {
-  RAF = requestAnimationFrame(gameLoop);
-} else {
-  generateRegistration();
-}
+// if (localStorage.getItem("id")) {
+//   RAF = requestAnimationFrame(gameLoop);
+// } else {
+//   console.log(game);
+//   generateRegistration();
+// }
 
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
@@ -365,3 +366,5 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
+
+RAF = requestAnimationFrame(gameLoop);
