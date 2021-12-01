@@ -25,4 +25,18 @@ router.get(
   })
 );
 
+router.post(
+  "/signup",
+  asyncMiddleware(async (req, res, next) => {
+    const { nickname, id } = req.body;
+    const sameNickname = await UserModel.findOne({ nickname }).exec();
+    if (sameNickname) {
+      res.status(400).json({ status: "bad" });
+    } else {
+      await UserModel.create({ nickname, id });
+      res.status(200).json({ status: "ok" });
+    }
+  })
+);
+
 module.exports = router;

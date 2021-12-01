@@ -23,27 +23,7 @@ import {
 } from "./constants.js";
 import { generateRegistration } from "./registration.js";
 
-// document.querySelector(".l").addEventListener("click", (e) => {
-//   if (game.classList.contains("game-hidden")) {
-//     game.classList.add("game-transition");
-//     game.classList.remove("game-hidden");
-//   } else {
-//     game.classList.add("game-transition");
-//     game.classList.add("game-hidden");
-//   }
-// });
-
-// game.addEventListener("transitioned", () => {
-//   game.classList.remove("game-transition");
-// });
-
-// if (localStorage.getItem("id")) {
-//   RAF = requestAnimationFrame(gameLoop);
-// } else {
-//   console.log(game);
-//   generateRegistration();
-// }
-
+const player = localStorage.getItem("nickname");
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
 const cell = 32;
@@ -56,6 +36,10 @@ const possibleLineScores = [150, 175, 200];
 let localTopScore = localStorage.getItem("Top-score") || "000000";
 let gameOver = false;
 topScore.textContent = localTopScore;
+
+export function modifyRAF(value) {
+  RAF = requestAnimationFrame(value);
+}
 
 const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
@@ -269,6 +253,11 @@ const submitScore = async (data) => {
   return response.json();
 };
 
+// const getUsers = async () => {
+//   const response = await fetch("http://localhost:3000/get-users");
+//   return response.json();
+// };
+
 const showGameOver = () => {
   cancelAnimationFrame(RAF);
   gameOver = true;
@@ -280,10 +269,12 @@ const showGameOver = () => {
     alertButton.classList.remove("alert-button--mgtop");
     localStorage.setItem("Top-score", scoreText);
   }
-  submitScore({ nickname: "denis", score: 41 }).then((res) => console.log(res));
+  submitScore({ nickname: player, score: score }).then((res) =>
+    console.log(res)
+  );
 };
 
-const gameLoop = () => {
+export const gameLoop = () => {
   RAF = requestAnimationFrame(gameLoop);
   context.clearRect(0, 0, canvas.width, canvas.height);
   for (let row = 0; row < canvas.height / 32; row++) {
@@ -367,4 +358,8 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-RAF = requestAnimationFrame(gameLoop);
+if (localStorage.getItem("id")) {
+  RAF = requestAnimationFrame(gameLoop);
+} else {
+  generateRegistration();
+}
