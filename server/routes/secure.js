@@ -10,8 +10,8 @@ router.post(
     const thisUser = await UserModel.findOne({ nickname }).exec();
     if (score > thisUser.highScore) {
       await UserModel.updateOne({ nickname }, { highScore: score });
+      res.status(200).json({ status: "ok" });
     }
-    res.status(200).json({ status: "ok" });
   })
 );
 

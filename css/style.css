@@ -32,18 +32,26 @@
   left: 50%;
   top: 50%;
   margin: -125px 0 0 -175px;
+  padding: 40px 0 0 0;
   background-color: white;
   z-index: 5;
+  border-radius: 0% 0% 0% 0% / 0% 0% 0% 0%;
+  box-shadow: 20px 20px rgba(211, 208, 208, 0.15);
+
   transition: transform 1s 0s;
 }
 .input {
-  width: 150px;
   height: 20px;
   font-size: 11px;
   font-weight: 400;
   font-family: "Press Start 2P";
-  margin-bottom: 10px;
-  outline: thistle;
+  width: 220px;
+}
+.input:focus {
+  outline: none;
+}
+.confirm-registration {
+  margin-top: 30px;
 }
 .nickname-error {
   font-size: 14px;
@@ -51,16 +59,8 @@
   font-family: "Outfit";
   margin-top: 5px;
 }
-.input-error {
-  border: none;
-  outline-width: 2px;
-  outline-style: solid;
-  outline-color: red;
-}
 .confirm-registration {
-  width: 80px;
-  height: 25px;
-  margin-top: 15px;
+  padding: 4px;
 }
 .register-content-wrapper {
   display: flex;

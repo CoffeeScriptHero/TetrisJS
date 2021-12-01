@@ -28,18 +28,49 @@ const createUser = async (data) => {
   return response.json();
 };
 
+const endRegistration = (register, nickname) => {
+  register.classList.add("register-wrapper-removed");
+  modifyRAF(gameLoop);
+  if (game.classList.contains("game-hidden")) {
+    game.classList.add("game-transition");
+    game.classList.remove("game-hidden");
+  }
+  localStorage.setItem("player", nickname);
+  localStorage.setItem("id", generateId());
+};
+
 const registration = `
     <div class="register-wrapper">
         <p class="register-upper-text">Create a nickname:</p>
           <div class="register-content-wrapper">
-            <input class="input" type="text"> 
+            <input class="input nes-input is-success" type="text"> 
             <span class="nickname-error-empty nickname-error display-none">The input line is empty</span>
             <span class="nickname-error-long nickname-error display-none">Nickname is too long</span>
             <span class="nickname-error-exist nickname-error display-none">Nickname is already exist</span>
-            <button class="confirm-registration">Lets go</button>
+            <button class="confirm-registration nes-btn is-success" href="#">Let${"`"}s go</button>
           </div>
     </div>
     `;
+
+const inputHandler = (errorEmpty, errorLong, errorExist, input, e) => {
+  const result = isValidNickname(e.target.value);
+
+  errorExist.classList.add("display-none");
+
+  if (result === "empty") {
+    errorEmpty.classList.remove("display-none");
+    errorLong.classList.add("display-none");
+    input.classList.add("is-error");
+  } else if (result === "long") {
+    errorLong.classList.remove("display-none");
+    errorEmpty.classList.add("display-none");
+    input.classList.add("is-error");
+  } else {
+    errorLong.classList.add("display-none");
+    errorEmpty.classList.add("display-none");
+    input.classList.remove("is-error");
+  }
+};
 
 export const generateRegistration = () => {
   document.body.insertAdjacentHTML("afterbegin", registration);
@@ -48,6 +79,7 @@ export const generateRegistration = () => {
   const input = document.querySelector(".input");
   const errorEmpty = document.querySelector(".nickname-error-empty");
   const errorLong = document.querySelector(".nickname-error-long");
+  const errorExist = document.querySelector(".nickname-error-exist");
 
   game.classList.add("game-hidden");
 
@@ -55,23 +87,10 @@ export const generateRegistration = () => {
     game.classList.add("game-transition");
   }, 2000);
 
-  input.addEventListener("input", (e) => {
-    const result = isValidNickname(e.target.value);
-
-    if (result === "empty") {
-      errorEmpty.classList.remove("display-none");
-      errorLong.classList.add("display-none");
-      input.classList.add("input-error");
-    } else if (result === "long") {
-      errorLong.classList.remove("display-none");
-      errorEmpty.classList.add("display-none");
-      input.classList.add("input-error");
-    } else {
-      errorLong.classList.add("display-none");
-      errorEmpty.classList.add("display-none");
-      input.classList.remove("input-error");
-    }
-  });
+  input.addEventListener(
+    "input",
+    inputHandler.bind(null, errorEmpty, errorLong, errorExist, input)
+  );
 
   registerWrapper.addEventListener("transitionend", () => {
     registerWrapper.remove();
@@ -84,20 +103,16 @@ export const generateRegistration = () => {
 
     if (result === true) {
       createUser({ nickname: nickname, id: id }).then((res) => {
-        if (res.status === "bad") return;
+        if (res.status === "ok") {
+          endRegistration(registerWrapper, nickname);
+        } else {
+          errorExist.classList.remove("display-none");
+          input.classList.add("is-error");
+        }
       });
-
-      registerWrapper.classList.add("register-wrapper-removed");
-      modifyRAF(gameLoop);
-      if (game.classList.contains("game-hidden")) {
-        game.classList.add("game-transition");
-        game.classList.remove("game-hidden");
-      }
-      localStorage.setItem("player", nickname);
-      localStorage.setItem("id", generateId());
     } else if (result === "empty") {
       errorEmpty.classList.remove("display-none");
-      input.classList.add("input-error");
+      input.classList.add("is-error");
     }
   });
 };

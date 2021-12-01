@@ -16,14 +16,12 @@ import {
   linesScore,
   alertButton,
   score,
-  game,
   alertScore,
   topScore,
   record,
 } from "./constants.js";
 import { generateRegistration } from "./registration.js";
 
-const player = localStorage.getItem("nickname");
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
 const cell = 32;
@@ -35,6 +33,7 @@ const possibleScores = [3, 4, 5, 6];
 const possibleLineScores = [150, 175, 200];
 let localTopScore = localStorage.getItem("Top-score") || "000000";
 let gameOver = false;
+let stopped = true;
 topScore.textContent = localTopScore;
 
 export function modifyRAF(value) {
@@ -237,6 +236,7 @@ const placeTetromino = () => {
     }
     scoresToReceive += extraPoints;
     updateScore(scoresToReceive);
+    checkRecord();
   }
 
   tetromino = getNextTetromino();
@@ -269,9 +269,48 @@ const showGameOver = () => {
     alertButton.classList.remove("alert-button--mgtop");
     localStorage.setItem("Top-score", scoreText);
   }
-  submitScore({ nickname: player, score: score }).then((res) =>
-    console.log(res)
-  );
+  const player = localStorage.getItem("player");
+  submitScore({ nickname: player, score: parseInt(scoreText) });
+};
+
+const pauseGame = () => {
+  if (stopped) {
+    context.fillStyle = "white";
+    context.globalAlpha = 1;
+    context.fillRect(0, canvas.height / 2 - 30, canvas.width, 60);
+    context.globalAlpha = 1;
+    context.fillStyle = "white";
+    context.font = "36px monospace";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText(
+      "Press escape to unpause",
+      canvas.width / 2,
+      canvas.height / 2
+    );
+  }
+};
+
+const drawField = () => {
+  for (let row = 0; row < tetromino.matrix.length; row++) {
+    for (let col = 0; col < tetromino.matrix[row].length; col++) {
+      if (tetromino.matrix[row][col]) {
+        context.fillStyle = colors[tetromino.name];
+        context.fillRect(
+          (tetromino.col + col) * cell,
+          (tetromino.row + row) * cell,
+          cell,
+          cell
+        );
+        context.strokeRect(
+          (tetromino.col + col) * cell,
+          (tetromino.row + row) * cell,
+          cell,
+          cell
+        );
+      }
+    }
+  }
 };
 
 export const gameLoop = () => {
@@ -287,7 +326,7 @@ export const gameLoop = () => {
     }
   }
 
-  if (tetromino) {
+  if (tetromino && !stopped) {
     if (++count > 35) {
       tetromino.row++;
       count = 0;
@@ -297,27 +336,8 @@ export const gameLoop = () => {
         placeTetromino();
       }
     }
-
-    for (let row = 0; row < tetromino.matrix.length; row++) {
-      for (let col = 0; col < tetromino.matrix[row].length; col++) {
-        if (tetromino.matrix[row][col]) {
-          context.fillStyle = colors[tetromino.name];
-          context.fillRect(
-            (tetromino.col + col) * cell,
-            (tetromino.row + row) * cell,
-            cell,
-            cell
-          );
-          context.strokeRect(
-            (tetromino.col + col) * cell,
-            (tetromino.row + row) * cell,
-            cell,
-            cell
-          );
-        }
-      }
-    }
   }
+  drawField();
 };
 
 document.addEventListener("keydown", (e) => {
@@ -356,6 +376,8 @@ document.addEventListener("keydown", (e) => {
       }
     }
   }
+  if (e.key === "Escape") {
+  }
 });
 
 if (localStorage.getItem("id")) {
@@ -363,3 +385,5 @@ if (localStorage.getItem("id")) {
 } else {
   generateRegistration();
 }
+
+pauseGame();
