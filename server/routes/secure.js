@@ -6,8 +6,11 @@ const router = express.Router();
 router.post(
   "/submit-score",
   asyncMiddleware(async (req, res, next) => {
-    const { nickname, score } = req.body;
+    const { nickname, score, id } = req.body;
     const thisUser = await UserModel.findOne({ nickname }).exec();
+    if (!thisUser) {
+      await UserModel.create({ nickname, highScore: score, id });
+    }
     if (score > thisUser.highScore) {
       await UserModel.updateOne({ nickname }, { highScore: score });
       res.status(200).json({ status: "ok" });
@@ -16,7 +19,7 @@ router.post(
 );
 
 router.get(
-  "/scores",
+  "/get-users",
   asyncMiddleware(async (req, res, next) => {
     const users = await UserModel.find({}, "nickname highScore -_id").sort({
       highScore: -1,
