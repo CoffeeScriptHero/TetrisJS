@@ -20,7 +20,13 @@ import {
   topScore,
   record,
 } from "./constants.js";
+import { submitScore, getUsers } from "./serverFunctions.js";
 import { generateRegistration } from "./registration.js";
+import { leaderboardHandler } from "./leaderboard.js";
+
+getUsers().then((res) => {
+  leaderboardHandler();
+});
 
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
@@ -31,7 +37,8 @@ let RAF = null;
 let count = 0;
 const possibleScores = [3, 4, 5, 6];
 const possibleLineScores = [150, 175, 200];
-let localTopScore = localStorage.getItem("Top-score") || "000000";
+let localTopScore = localStorage.getItem("top-score") || "000000";
+let localLinesScore = localStorage.getItem("lines-score") || "000";
 let gameOver = false;
 let stopped = true;
 topScore.textContent = localTopScore;
@@ -57,7 +64,7 @@ alertButton.addEventListener("click", () => {
   clearNextField();
   score.textContent = "000000";
   linesScore.textContent = "000";
-  localTopScore = localStorage.getItem("Top-score");
+  localTopScore = localStorage.getItem("top-score");
   gameOver = false;
   refreshStatistics();
   clearStatisticsField();
@@ -112,6 +119,16 @@ const checkRecord = () => {
   const scoreNumber = parseInt(scoreText);
   if (parseInt(localTopScore) < scoreNumber) {
     topScore.textContent = scoreText;
+    return true;
+  }
+};
+
+const checkLinesRecord = () => {
+  let linesNumber = parseInt(linesScore.textContent);
+  if (
+    parseInt(localLinesScore) < linesNumber ||
+    isNaN(parseInt(localLinesScore))
+  ) {
     return true;
   }
 };
@@ -242,45 +259,40 @@ const placeTetromino = () => {
   tetromino = getNextTetromino();
 };
 
-const submitScore = async (data) => {
-  const response = await fetch("http://localhost:3000/submit-score", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
-};
-
-// const getUsers = async () => {
-//   const response = await fetch("http://localhost:3000/get-users");
-//   return response.json();
-// };
-
 const showGameOver = () => {
   cancelAnimationFrame(RAF);
   gameOver = true;
   gameAlert.classList.remove("display-none");
   const scoreText = score.textContent;
+  const linesText = linesScore.textContent;
   alertScore.textContent = scoreText;
+
+  // if (!checkRecord() || !checkLinesRecord()) return;
+  console.log("рекорд есть");
   if (checkRecord()) {
     record.classList.remove("display-none");
     alertButton.classList.remove("alert-button--mgtop");
-    localStorage.setItem("Top-score", scoreText);
+    localStorage.setItem("top-score", scoreText);
+  }
+  if (checkLinesRecord()) {
+    localStorage.setItem("lines-score", linesText);
   }
   const player = localStorage.getItem("player");
-  submitScore({ nickname: player, score: parseInt(scoreText) });
+
+  submitScore({
+    nickname: player,
+    score: localStorage.getItem("top-score"),
+    lines: localStorage.getItem("lines-score"),
+    id: parseInt(localStorage.getItem("id")),
+  });
 };
 
-const pauseGame = () => {
+const pauseGame = async () => {
   if (stopped) {
-    context.fillStyle = "white";
-    context.globalAlpha = 1;
+    context.fillStyle = "black";
     context.fillRect(0, canvas.height / 2 - 30, canvas.width, 60);
-    context.globalAlpha = 1;
     context.fillStyle = "white";
-    context.font = "36px monospace";
+    context.font = "12px customFont";
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.fillText(
@@ -292,6 +304,18 @@ const pauseGame = () => {
 };
 
 const drawField = () => {
+  for (let row = 0; row < canvas.height / 32; row++) {
+    for (let col = 0; col < canvas.width / 32; col++) {
+      if (field[row][col]) {
+        context.fillStyle = colors[field[row][col]];
+        context.fillRect(col * cell, row * cell, cell, cell);
+        context.strokeRect(col * cell, row * cell, cell, cell);
+      }
+    }
+  }
+};
+
+const moveTetromino = () => {
   for (let row = 0; row < tetromino.matrix.length; row++) {
     for (let col = 0; col < tetromino.matrix[row].length; col++) {
       if (tetromino.matrix[row][col]) {
@@ -314,69 +338,72 @@ const drawField = () => {
 };
 
 export const gameLoop = () => {
-  RAF = requestAnimationFrame(gameLoop);
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  for (let row = 0; row < canvas.height / 32; row++) {
-    for (let col = 0; col < canvas.width / 32; col++) {
-      if (field[row][col]) {
-        context.fillStyle = colors[field[row][col]];
-        context.fillRect(col * cell, row * cell, cell, cell);
-        context.strokeRect(col * cell, row * cell, cell, cell);
+  if (!stopped) {
+    RAF = requestAnimationFrame(gameLoop);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    moveTetromino();
+    if (tetromino) {
+      if (++count > 35) {
+        tetromino.row++;
+        count = 0;
+
+        if (!isValidMove(tetromino.matrix, tetromino.row, tetromino.col)) {
+          tetromino.row--;
+          placeTetromino();
+        }
       }
     }
+    drawField();
+  } else {
+    cancelAnimationFrame(RAF);
+    drawField();
+    pauseGame();
   }
-
-  if (tetromino && !stopped) {
-    if (++count > 35) {
-      tetromino.row++;
-      count = 0;
-
-      if (!isValidMove(tetromino.matrix, tetromino.row, tetromino.col)) {
-        tetromino.row--;
-        placeTetromino();
-      }
-    }
-  }
-  drawField();
 };
 
 document.addEventListener("keydown", (e) => {
   if (gameOver) return;
 
-  if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-    const col = e.key === "ArrowLeft" ? tetromino.col - 1 : tetromino.col + 1;
+  if (!stopped) {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      const col = e.key === "ArrowLeft" ? tetromino.col - 1 : tetromino.col + 1;
 
-    if (isValidMove(tetromino.matrix, tetromino.row, col)) {
-      tetromino.col = col;
+      if (isValidMove(tetromino.matrix, tetromino.row, col)) {
+        tetromino.col = col;
+      }
     }
-  }
 
-  if (e.key === "ArrowUp" && !e.repeat) {
-    const matrix = transponseMatrix(tetromino.matrix);
-    if (isValidMove(matrix, tetromino.row, tetromino.col)) {
-      tetromino.matrix = matrix;
+    if (e.key === "ArrowUp" && !e.repeat) {
+      const matrix = transponseMatrix(tetromino.matrix);
+      if (isValidMove(matrix, tetromino.row, tetromino.col)) {
+        tetromino.matrix = matrix;
+      }
     }
-  }
 
-  if (e.key === "ArrowDown") {
-    const row = tetromino.row + 1;
-    if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
-      tetromino.row = row - 1;
-      placeTetromino();
-      return;
-    }
-    tetromino.row = row;
-  }
-  if (e.key === " " && !e.repeat) {
-    for (let row = tetromino.row; row < field.length; row++) {
-      tetromino.row = row - 1;
-      if (!isValidMove(tetromino.matrix, row, tetromino.col) && field[0]) {
+    if (e.key === "ArrowDown") {
+      const row = tetromino.row + 1;
+      if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
+        tetromino.row = row - 1;
         placeTetromino();
         return;
+      }
+      tetromino.row = row;
+    }
+    if (e.key === " " && !e.repeat) {
+      for (let row = tetromino.row; row < field.length; row++) {
+        tetromino.row = row - 1;
+        if (!isValidMove(tetromino.matrix, row, tetromino.col) && field[0]) {
+          placeTetromino();
+          return;
+        }
       }
     }
   }
   if (e.key === "Escape") {
+    stopped = !stopped;
+    if (!stopped) {
+      RAF = requestAnimationFrame(gameLoop);
+    }
   }
 });
 
@@ -385,5 +412,3 @@ if (localStorage.getItem("id")) {
 } else {
   generateRegistration();
 }
-
-pauseGame();

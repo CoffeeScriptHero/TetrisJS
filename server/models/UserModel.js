@@ -8,7 +8,11 @@ const UserSchema = new Schema({
     required: true,
   },
   highScore: {
-    type: Number,
+    type: String,
+    default: 0,
+  },
+  linesScore: {
+    type: String,
     default: 0,
   },
   id: {

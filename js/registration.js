@@ -1,5 +1,6 @@
 import { game } from "./constants.js";
 import { modifyRAF, gameLoop } from "./index.js";
+import { createUser } from "./serverFunctions.js";
 
 const isValidNickname = (nickname) => {
   const nicknameArr = nickname.split("");
@@ -17,18 +18,7 @@ const generateId = () => {
   return id;
 };
 
-const createUser = async (data) => {
-  const response = await fetch("http://localhost:3000/signup", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
-};
-
-const endRegistration = (register, nickname) => {
+const endRegistration = (register, nickname, id) => {
   register.classList.add("register-wrapper-removed");
   modifyRAF(gameLoop);
   if (game.classList.contains("game-hidden")) {
@@ -36,7 +26,7 @@ const endRegistration = (register, nickname) => {
     game.classList.remove("game-hidden");
   }
   localStorage.setItem("player", nickname);
-  localStorage.setItem("id", generateId());
+  localStorage.setItem("id", id);
 };
 
 const registration = `
@@ -100,11 +90,12 @@ export const generateRegistration = () => {
     const result = isValidNickname(input.value);
     const nickname = input.value;
     const id = generateId();
-
     if (result === true) {
       createUser({ nickname: nickname, id: id }).then((res) => {
         if (res.status === "ok") {
-          endRegistration(registerWrapper, nickname);
+          endRegistration(registerWrapper, nickname, id);
+          localStorage.setItem("top-score", "000000");
+          localStorage.setItem("lines-score", "000");
         } else {
           errorExist.classList.remove("display-none");
           input.classList.add("is-error");
