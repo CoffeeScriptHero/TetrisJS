@@ -6,30 +6,42 @@ const router = express.Router();
 router.post(
   "/submit-score",
   asyncMiddleware(async (req, res, next) => {
-    const { nickname, score, lines, id } = req.body;
+    const { nickname, topScore, linesScore, id } = req.body;
     const thisUser = await UserModel.findOne({ nickname }).exec();
     if (!thisUser) {
       await UserModel.create({
         nickname,
-        highScore: score,
-        linesScore: lines,
+        topScore,
+        linesScore,
         id,
       });
     }
-    if (parseInt(score) > parseInt(thisUser.highScore)) {
-      await UserModel.updateOne({ id }, { highScore: score });
+    if (parseInt(topScore) > parseInt(thisUser.topScore)) {
+      await UserModel.updateOne({ id }, { topScore });
     }
-    if (parseInt(lines) > parseInt(thisUser.linesScore)) {
-      await UserModel.updateOne({ id }, { linesScore: lines });
+    if (parseInt(linesScore) > parseInt(thisUser.linesScore)) {
+      await UserModel.updateOne({ id }, { linesScore });
     }
+  })
+);
+
+router.post(
+  "/get-top-score",
+  asyncMiddleware(async (req, res, next) => {
+    const { id } = req.body;
+    const user = await UserModel.find({ id });
+    if (user) res.status(200).json({ topScore: user[0].topScore });
   })
 );
 
 router.get(
   "/get-users",
   asyncMiddleware(async (req, res, next) => {
-    const users = await UserModel.find({}, "nickname highScore -_id").sort({
-      highScore: -1,
+    const users = await UserModel.find(
+      {},
+      "nickname topScore linesScore -_id"
+    ).sort({
+      topScore: -1,
     });
     res.status(200).json(users);
   })

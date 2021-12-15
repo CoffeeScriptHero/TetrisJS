@@ -1,11 +1,18 @@
+import { getUsers } from "./serverFunctions.js";
 import {
   leaderboardBtn,
   leaderboard,
   leaderboardContent,
+  leaderboardList,
 } from "./constants.js";
 
 const toggleLeaderboard = () => {
+  leaderboardList.textContent = "";
   leaderboard.classList.toggle("display-none");
+  const users = getUsers();
+  users.then((res) => {
+    fillLeaderboard(res);
+  });
 };
 
 const closeLeaderBoard = (e) => {
@@ -20,15 +27,34 @@ export const leaderboardHandler = () => {
 };
 
 export const fillLeaderboard = (usersArray) => {
-  // each user === array
-  const usersList = usersArray.map(
-    (u) => `
+  let firstPlace = "";
+  let nicknameArr = [];
+  let place = 0;
+  let nickname = "";
+
+  const usersList = usersArray.map((u, i) => {
+    nicknameArr = u.nickname.split("");
+    nickname =
+      nicknameArr.length > 10 ? nicknameArr.slice(0, 11).join("") : u.nickname;
+    place = i + 1 + ".";
+    firstPlace = "";
+    if (i === 0) {
+      firstPlace = `<div class="trophy-wrapper">
+      <i class="nes-icon trophy is-small"></i>
+    </div>`;
+      place = "";
+    }
+    return `
     <li class="leaderborad-player">
-    <span class="player-place">1. </span>
-    <span class="player-name">${u.nickname}</span>
-    <span class="player-score-title">score: <span class="player-score-number">${u.highScore}</span></span>
-    <span class="player-lines-title">lines: <span class="player-lines-number">${u.linesScore}</span></span>
+    <div class="player-name-wrapper">
+      ${firstPlace}
+      <span class="player-place">${place} </span>
+      <span class="player-name">${nickname}</span>
+    </div>
+      <span class="player-score-title">score: <span class="player-score-number">${u.topScore}</span></span>
+      <span class="player-lines-title">lines: <span class="player-lines-number">${u.linesScore}</span></span>
   </li>
-  `
-  );
+  `;
+  });
+  leaderboardList.insertAdjacentHTML("afterbegin", usersList.join(""));
 };

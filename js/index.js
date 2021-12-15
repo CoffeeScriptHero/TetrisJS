@@ -20,12 +20,14 @@ import {
   topScore,
   record,
 } from "./constants.js";
-import { submitScore, getUsers } from "./serverFunctions.js";
+import { setTopScore, getUsers, submitScore } from "./serverFunctions.js";
 import { generateRegistration } from "./registration.js";
 import { leaderboardHandler } from "./leaderboard.js";
 
+setTopScore(parseInt(localStorage.getItem("id")));
+
 getUsers().then((res) => {
-  leaderboardHandler();
+  leaderboardHandler(res);
 });
 
 const canvas = document.getElementById("gameCanvas");
@@ -37,11 +39,9 @@ let RAF = null;
 let count = 0;
 const possibleScores = [3, 4, 5, 6];
 const possibleLineScores = [150, 175, 200];
-let localTopScore = localStorage.getItem("top-score") || "000000";
-let localLinesScore = localStorage.getItem("lines-score") || "000";
 let gameOver = false;
 let stopped = true;
-topScore.textContent = localTopScore;
+let speed = 10;
 
 export function modifyRAF(value) {
   RAF = requestAnimationFrame(value);
@@ -53,6 +53,7 @@ theme.play();
 theme.volume = 0.05;
 
 alertButton.addEventListener("click", () => {
+  setTopScore(parseInt(localStorage.getItem("id")));
   gameAlert.classList.add("display-none");
   alertButton.classList.add("alert-button--mgtop");
   record.classList.add("display-none");
@@ -64,7 +65,6 @@ alertButton.addEventListener("click", () => {
   clearNextField();
   score.textContent = "000000";
   linesScore.textContent = "000";
-  localTopScore = localStorage.getItem("top-score");
   gameOver = false;
   refreshStatistics();
   clearStatisticsField();
@@ -117,18 +117,8 @@ const updateScore = (num) => {
 const checkRecord = () => {
   const scoreText = score.textContent;
   const scoreNumber = parseInt(scoreText);
-  if (parseInt(localTopScore) < scoreNumber) {
+  if (parseInt(topScore.textContent) <= scoreNumber) {
     topScore.textContent = scoreText;
-    return true;
-  }
-};
-
-const checkLinesRecord = () => {
-  let linesNumber = parseInt(linesScore.textContent);
-  if (
-    parseInt(localLinesScore) < linesNumber ||
-    isNaN(parseInt(localLinesScore))
-  ) {
     return true;
   }
 };
@@ -267,22 +257,17 @@ const showGameOver = () => {
   const linesText = linesScore.textContent;
   alertScore.textContent = scoreText;
 
-  // if (!checkRecord() || !checkLinesRecord()) return;
-  console.log("рекорд есть");
   if (checkRecord()) {
     record.classList.remove("display-none");
     alertButton.classList.remove("alert-button--mgtop");
-    localStorage.setItem("top-score", scoreText);
   }
-  if (checkLinesRecord()) {
-    localStorage.setItem("lines-score", linesText);
-  }
+
   const player = localStorage.getItem("player");
 
   submitScore({
     nickname: player,
-    score: localStorage.getItem("top-score"),
-    lines: localStorage.getItem("lines-score"),
+    topScore: scoreText,
+    linesScore: linesText,
     id: parseInt(localStorage.getItem("id")),
   });
 };
@@ -343,7 +328,7 @@ export const gameLoop = () => {
     context.clearRect(0, 0, canvas.width, canvas.height);
     moveTetromino();
     if (tetromino) {
-      if (++count > 35) {
+      if (++count > speed) {
         tetromino.row++;
         count = 0;
 
@@ -363,7 +348,6 @@ export const gameLoop = () => {
 
 document.addEventListener("keydown", (e) => {
   if (gameOver) return;
-
   if (!stopped) {
     if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
       const col = e.key === "ArrowLeft" ? tetromino.col - 1 : tetromino.col + 1;

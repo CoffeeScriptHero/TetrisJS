@@ -94,8 +94,6 @@ export const generateRegistration = () => {
       createUser({ nickname: nickname, id: id }).then((res) => {
         if (res.status === "ok") {
           endRegistration(registerWrapper, nickname, id);
-          localStorage.setItem("top-score", "000000");
-          localStorage.setItem("lines-score", "000");
         } else {
           errorExist.classList.remove("display-none");
           input.classList.add("is-error");

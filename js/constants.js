@@ -64,6 +64,7 @@ export const alertScore = document.querySelector(".alert-score");
 export const regButton = document.querySelector(".registration-button");
 export const leaderboard = document.querySelector(".leaderboard");
 export const leaderboardBtn = document.querySelector(".leaderboard-btn");
+export const leaderboardList = document.querySelector(".leaderboard-list");
 export const leaderboardContent = document.querySelector(
   ".leaderboard-content-wrapper"
 );

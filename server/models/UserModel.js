@@ -7,13 +7,13 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  highScore: {
+  topScore: {
     type: String,
-    default: 0,
+    default: "000000",
   },
   linesScore: {
     type: String,
-    default: 0,
+    default: "000",
   },
   id: {
     type: Number,
