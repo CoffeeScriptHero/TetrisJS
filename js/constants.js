@@ -52,6 +52,8 @@ export const customFont = new FontFace(
 );
 
 export const game = document.querySelector(".game");
+export const musicOn = document.querySelector(".svg-music-on");
+export const musicOff = document.querySelector(".svg-music-off");
 export const statisticCanvas = document.getElementById("statisticsCanvas");
 export const nextCanvas = document.getElementById("nextCanvas");
 export const gameAlert = document.querySelector(".game-alert");

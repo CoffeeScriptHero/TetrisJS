@@ -10,6 +10,8 @@ import {
 } from "./next.js";
 
 import {
+  musicOn,
+  musicOff,
   tetrominos,
   colors,
   gameAlert,
@@ -23,6 +25,11 @@ import {
 import { setTopScore, getUsers, submitScore } from "./serverFunctions.js";
 import { generateRegistration } from "./registration.js";
 import { leaderboardHandler } from "./leaderboard.js";
+
+musicOn.addEventListener("click", (e) => {
+  e.target.classList.add("svg-display-none");
+  musicOff.classList.remove("svg-display-none");
+});
 
 setTopScore(parseInt(localStorage.getItem("id")));
 
