@@ -31,8 +31,8 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({ error: err, message: "все поломалось..." });
+  res.status(400);
+  res.json({ error: 400, message: "все поломалось..." });
 });
 
 app.listen(process.env.PORT || 3000, () => {

@@ -24,7 +24,7 @@
                 </g>
         </symbol>
     </svg>
-    <svg class="svg svg-music-on">
+    <svg class="svg svg-music-on svg-display-none">
         <use xlink:href="#svg1"></use>
     </svg>
   <svg display="none">
@@ -89,6 +89,15 @@
       </div>
     </div>
     </div>
+    <script>
+      const musicOn = document.querySelector(".svg-music-on");
+      const musicOff = document.querySelector(".svg-music-off");
+      const status = localStorage.getItem("music");
+      if (status) {
+        if (parseInt(status)) musicOn.classList.remove("svg-display-none");
+        else musicOff.classList.remove("svg-display-none");
+      } 
+    </script>
     <script src="js/index.js" type="module"></script>
   </body>
 </html>

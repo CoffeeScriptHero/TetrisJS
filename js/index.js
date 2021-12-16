@@ -10,6 +10,7 @@ import {
 } from "./next.js";
 
 import {
+  customFont,
   musicOn,
   musicOff,
   tetrominos,
@@ -26,11 +27,9 @@ import { setTopScore, getUsers, submitScore } from "./serverFunctions.js";
 import { generateRegistration } from "./registration.js";
 import { leaderboardHandler } from "./leaderboard.js";
 
-setTopScore(parseInt(localStorage.getItem("id")));
+setTopScore();
 
-getUsers().then((res) => {
-  leaderboardHandler(res);
-});
+leaderboardHandler();
 
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
@@ -50,10 +49,15 @@ export function modifyRAF(value) {
   RAF = requestAnimationFrame(value);
 }
 
-const theme = new Audio("../audio/theme.mp3");
+export const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
-theme.play();
-theme.volume = 0.05;
+let musicStatus = localStorage.getItem("music");
+
+if (musicStatus) {
+  const status = parseInt(musicStatus);
+  theme.volume = status ? 0.05 : 0;
+  theme.play();
+}
 
 const swapButtons = () => {
   const hidden = "svg-display-none";
@@ -61,7 +65,9 @@ const swapButtons = () => {
   musicOff.classList.toggle(hidden);
   if (musicOn.classList.contains(hidden)) {
     theme.volume = 0;
+    localStorage.setItem("music", "0");
   } else {
+    localStorage.setItem("music", "1");
     theme.volume = 0.05;
   }
 };
@@ -70,7 +76,7 @@ musicOn.addEventListener("click", swapButtons);
 musicOff.addEventListener("click", swapButtons);
 
 alertButton.addEventListener("click", () => {
-  setTopScore(parseInt(localStorage.getItem("id")));
+  setTopScore();
   gameAlert.classList.add("display-none");
   alertButton.classList.add("alert-button--mgtop");
   record.classList.add("display-none");
@@ -113,7 +119,7 @@ const updateLinesScore = () => {
   }
 };
 
-const updateScore = (num) => {
+const updateScore = () => {
   const textScore = ("000000" + currScore).slice(-6);
   score.textContent = textScore;
 };
@@ -121,7 +127,12 @@ const updateScore = (num) => {
 const checkRecord = () => {
   const scoreText = score.textContent;
   const scoreNumber = parseInt(scoreText);
-  if (parseInt(topScore.textContent) <= scoreNumber) {
+  const topScoreNum = parseInt(topScore.textContent);
+  if (topScoreNum > scoreNumber) {
+    setTopScore();
+    return false;
+  }
+  if (topScoreNum <= scoreNumber) {
     topScore.textContent = scoreText;
     return true;
   }
@@ -220,7 +231,8 @@ const placeTetromino = () => {
   }
   let scoresToReceive =
     possibleScores[getRandomInt(0, possibleScores.length - 1)];
-  updateScore(scoresToReceive);
+  currScore += scoresToReceive;
+  updateScore();
   checkRecord();
 
   scoresToReceive = 0;
@@ -242,12 +254,13 @@ const placeTetromino = () => {
   if (rowsCounter) {
     let extraPoints = 0;
     for (let i = 0; i < rowsCounter; i++) {
-      extraPoints += 50;
+      if (i >= 1) extraPoints += 50;
       scoresToReceive +=
         possibleLineScores[getRandomInt(0, possibleLineScores.length - 1)];
     }
     scoresToReceive += extraPoints;
-    updateScore(scoresToReceive);
+    currScore += scoresToReceive;
+    updateScore();
     checkRecord();
   }
 
@@ -285,11 +298,13 @@ const pauseGame = async () => {
     context.font = "12px customFont";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.fillText(
-      "Press escape to unpause",
-      canvas.width / 2,
-      canvas.height / 2
-    );
+    customFont.load().then(() => {
+      context.fillText(
+        "Press escape to unpause",
+        canvas.width / 2,
+        canvas.height / 2
+      );
+    });
   }
 };
 

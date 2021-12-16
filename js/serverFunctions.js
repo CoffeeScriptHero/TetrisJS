@@ -22,7 +22,8 @@ export const getTopScore = async (data) => {
   return response.json();
 };
 
-export const setTopScore = (id) => {
+export const setTopScore = () => {
+  const id = parseInt(localStorage.getItem("id"));
   if (id) {
     getTopScore({ id }).then((res) => {
       topScore.textContent = res.topScore;

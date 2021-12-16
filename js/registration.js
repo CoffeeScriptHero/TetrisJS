@@ -1,5 +1,5 @@
-import { game } from "./constants.js";
-import { modifyRAF, gameLoop } from "./index.js";
+import { game, musicOn } from "./constants.js";
+import { modifyRAF, gameLoop, theme } from "./index.js";
 import { createUser } from "./serverFunctions.js";
 
 const isValidNickname = (nickname) => {
@@ -27,6 +27,12 @@ const endRegistration = (register, nickname, id) => {
   }
   localStorage.setItem("player", nickname);
   localStorage.setItem("id", id);
+  localStorage.setItem("music", "1");
+  setTimeout(() => {
+    theme.play();
+    musicOn.classList.remove("svg-display-none");
+    theme.volume = 0.05;
+  }, 3500);
 };
 
 const registration = `

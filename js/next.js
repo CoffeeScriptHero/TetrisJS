@@ -7,8 +7,7 @@ import {
 
 const context = canvas.getContext("2d");
 
-customFont.load().then((font) => {
-  document.fonts.add(font);
+customFont.load().then(() => {
   context.fillStyle = "white";
   context.font = "20px customFont";
   context.textAlign = "center";

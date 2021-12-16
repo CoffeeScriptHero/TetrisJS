@@ -15,12 +15,13 @@ router.post(
         linesScore,
         id,
       });
-    }
-    if (parseInt(topScore) > parseInt(thisUser.topScore)) {
-      await UserModel.updateOne({ id }, { topScore });
-    }
-    if (parseInt(linesScore) > parseInt(thisUser.linesScore)) {
-      await UserModel.updateOne({ id }, { linesScore });
+    } else {
+      if (parseInt(topScore) > parseInt(thisUser.topScore)) {
+        await UserModel.updateOne({ id }, { topScore });
+      }
+      if (parseInt(linesScore) > parseInt(thisUser.linesScore)) {
+        await UserModel.updateOne({ id }, { linesScore });
+      }
     }
   })
 );
@@ -29,8 +30,10 @@ router.post(
   "/get-top-score",
   asyncMiddleware(async (req, res, next) => {
     const { id } = req.body;
-    const user = await UserModel.find({ id });
-    if (user) res.status(200).json({ topScore: user[0].topScore });
+    const user = await UserModel.findOne({ id }).exec();
+    let topScore = 0;
+    topScore = user ? user.topScore : "000000";
+    res.status(200).json({ topScore: topScore });
   })
 );
 
