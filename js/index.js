@@ -26,11 +26,6 @@ import { setTopScore, getUsers, submitScore } from "./serverFunctions.js";
 import { generateRegistration } from "./registration.js";
 import { leaderboardHandler } from "./leaderboard.js";
 
-musicOn.addEventListener("click", (e) => {
-  e.target.classList.add("svg-display-none");
-  musicOff.classList.remove("svg-display-none");
-});
-
 setTopScore(parseInt(localStorage.getItem("id")));
 
 getUsers().then((res) => {
@@ -48,7 +43,8 @@ const possibleScores = [3, 4, 5, 6];
 const possibleLineScores = [150, 175, 200];
 let gameOver = false;
 let stopped = true;
-let speed = 10;
+let speed = 35;
+let currScore = 0;
 
 export function modifyRAF(value) {
   RAF = requestAnimationFrame(value);
@@ -59,6 +55,20 @@ theme.loop = true;
 theme.play();
 theme.volume = 0.05;
 
+const swapButtons = () => {
+  const hidden = "svg-display-none";
+  musicOn.classList.toggle(hidden);
+  musicOff.classList.toggle(hidden);
+  if (musicOn.classList.contains(hidden)) {
+    theme.volume = 0;
+  } else {
+    theme.volume = 0.05;
+  }
+};
+
+musicOn.addEventListener("click", swapButtons);
+musicOff.addEventListener("click", swapButtons);
+
 alertButton.addEventListener("click", () => {
   setTopScore(parseInt(localStorage.getItem("id")));
   gameAlert.classList.add("display-none");
@@ -68,6 +78,7 @@ alertButton.addEventListener("click", () => {
   fillField();
   tSequence = [];
   count = 0;
+  currScore = 0;
   generateSequence();
   clearNextField();
   score.textContent = "000000";
@@ -103,22 +114,8 @@ const updateLinesScore = () => {
 };
 
 const updateScore = (num) => {
-  let currentScore = parseInt(score.textContent);
-  const sum = currentScore + num;
-  if (sum < 10) {
-    currentScore = "00000" + sum;
-  } else if (sum < 100) {
-    currentScore = "0000" + sum;
-  } else if (sum < 1000) {
-    currentScore = "000" + sum;
-  } else if (sum < 10000) {
-    currentScore = "00" + sum;
-  } else if (sum < 100000) {
-    currentScore = "0" + sum;
-  } else {
-    currentScore += num;
-  }
-  score.textContent = currentScore;
+  const textScore = ("000000" + currScore).slice(-6);
+  score.textContent = textScore;
 };
 
 const checkRecord = () => {
@@ -221,11 +218,12 @@ const placeTetromino = () => {
       }
     }
   }
-  const score = possibleScores[getRandomInt(0, possibleScores.length - 1)];
-  updateScore(score);
+  let scoresToReceive =
+    possibleScores[getRandomInt(0, possibleScores.length - 1)];
+  updateScore(scoresToReceive);
   checkRecord();
 
-  let scoresToReceive = 0;
+  scoresToReceive = 0;
   let rowsCounter = 0;
   for (let row = field.length - 1; row >= 0; ) {
     if (field[row].every((rowCell) => !!rowCell)) {

@@ -1,8 +1,5 @@
 .body {
   background: black;
-  /* display: flex; */
-  /* flex-direction: row;
-  justify-content: center; */
   overflow-y: hidden;
 }
 .game {
@@ -226,8 +223,9 @@
 .trophy-wrapper {
   margin-right: 15px;
 }
-
 .svg {
+  margin: 10px 0 0 10px;
+  display: block;
   fill: white;
   cursor: pointer;
   width: 36px;
@@ -235,20 +233,4 @@
 }
 .svg-display-none {
   display: none;
-}
-.change-music {
-  margin-top: 20px;
-  margin-left: 20px;
-  display: inline-block;
-}
-.change-music .svg-music-off {
-  display: none;
-}
-.change-music:hover .svg-music-on,
-.change-music:active .svg-music-on {
-  display: none;
-}
-.change-music:hover .svg-music-off,
-.change-music:active .svg-music-off {
-  display: block;
 }
