@@ -46,7 +46,7 @@ const possibleScores = [3, 4, 5, 6];
 const possibleLineScores = [150, 175, 200];
 let gameOver = false;
 let stopped = true;
-let speed = 30;
+let speed = screen.width <= 1200 ? 15 : 30;
 let currScore = 0;
 
 export function modifyRAF(value) {
