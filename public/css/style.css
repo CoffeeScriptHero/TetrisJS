@@ -9,7 +9,7 @@
   display: flex;
   width: fit-content;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 110px;
   opacity: 1;
 }
 .game-transition.game-hidden {
