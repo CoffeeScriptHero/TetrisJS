@@ -7,6 +7,7 @@ const routes = require("./routes/main");
 const secureRoutes = require("./routes/secure");
 const cors = require("cors");
 
+const PORT = process.env.PORT || 3000;
 const URI = process.env.MONGO_CONNECTION_URL;
 
 mongoose
@@ -36,6 +37,6 @@ app.use((err, req, res, next) => {
   res.json({ error: 400, message: "все поломалось..." });
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server started on port ${process.env.PORT || 3000}`);
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });
