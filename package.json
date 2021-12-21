@@ -1,19 +1,24 @@
 {
-  "name": "tetrisjs",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "/server/server.js",
+  "main": "server",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CoffeeScriptHero/TetrisJS.git"
+    "serve": "nodemon server/server.js",
+    "start": "node server/server.js",
+    "test": "npm begin"
   },
   "author": "Denis Kozarenko",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/CoffeeScriptHero/TetrisJS/issues"
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.13",
+    "nes.css": "^2.3.0"
   },
-  "homepage": "https://github.com/CoffeeScriptHero/TetrisJS#readme"
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }
