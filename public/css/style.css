@@ -75,10 +75,6 @@
   .game {
     margin-top: 0;
   }
-  .svg {
-    position: absolute;
-    top: 5px;
-  }
 }
 @media (max-width: 1050px) {
   .game-wrapper {
