@@ -49,6 +49,12 @@ export function modifyRAF(value) {
   RAF = requestAnimationFrame(value);
 }
 
+if (localStorage.getItem("id")) {
+  RAF = requestAnimationFrame(gameLoop);
+} else {
+  generateRegistration();
+}
+
 export const theme = new Audio("../audio/theme.mp3");
 theme.loop = true;
 let musicStatus = localStorage.getItem("music");
@@ -342,7 +348,7 @@ const moveTetromino = () => {
   }
 };
 
-export const gameLoop = () => {
+function gameLoop() {
   if (!stopped) {
     RAF = requestAnimationFrame(gameLoop);
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -364,7 +370,7 @@ export const gameLoop = () => {
     drawField();
     pauseGame();
   }
-};
+}
 
 document.addEventListener("keydown", (e) => {
   if (gameOver) return;
@@ -410,9 +416,3 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
-
-if (localStorage.getItem("id")) {
-  RAF = requestAnimationFrame(gameLoop);
-} else {
-  generateRegistration();
-}
