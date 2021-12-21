@@ -2,6 +2,9 @@
   background: black;
   overflow-y: hidden;
 }
+.fumny_alert {
+  display: none;
+}
 .game {
   display: flex;
   width: fit-content;
@@ -75,6 +78,30 @@
   .svg {
     position: absolute;
     top: 5px;
+  }
+}
+@media (max-width: 1050px) {
+  .game-wrapper {
+    display: none;
+  }
+  .fumny_pic {
+    max-width: 270px;
+    border-radius: 50%;
+  }
+  .fumny_alert {
+    display: block;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    text-align: center;
+  }
+  .fumny_text {
+    margin-top: 10px;
+    color: white;
+    font-size: 24px;
+    font-weight: 400px;
+    display: inline-block;
   }
 }
 .lines-wrapper {
@@ -183,7 +210,6 @@
   left: 0;
   z-index: 1;
 }
-
 .leaderboard-content-wrapper::-webkit-scrollbar {
   display: none;
 }
@@ -240,4 +266,9 @@
 }
 .svg-display-none {
   display: none;
+}
+.author {
+  position: absolute;
+  right: 15px;
+  bottom: 2px;
 }

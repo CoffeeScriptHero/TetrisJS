@@ -1,0 +1,22 @@
+{
+  "name": "tetrisjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CoffeeScriptHero/TetrisJS.git"
+  },
+  "author": "Denis Kozarenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CoffeeScriptHero/TetrisJS/issues"
+  },
+  "homepage": "https://github.com/CoffeeScriptHero/TetrisJS#readme",
+  "dependencies": {
+    "nes.css": "^2.3.0"
+  }
+}

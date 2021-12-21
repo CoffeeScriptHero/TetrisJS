@@ -23,7 +23,7 @@ import {
   topScore,
   record,
 } from "./constants.js";
-import { setTopScore, getUsers, submitScore } from "./serverFunctions.js";
+import { setTopScore, submitScore } from "./serverFunctions.js";
 import { generateRegistration } from "./registration.js";
 import { leaderboardHandler } from "./leaderboard.js";
 
@@ -42,7 +42,7 @@ const possibleScores = [3, 4, 5, 6];
 const possibleLineScores = [150, 175, 200];
 let gameOver = false;
 let stopped = true;
-let speed = 35;
+let speed = 15;
 let currScore = 0;
 
 export function modifyRAF(value) {
