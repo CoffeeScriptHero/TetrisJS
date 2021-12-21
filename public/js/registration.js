@@ -24,6 +24,7 @@ const endRegistration = (register, nickname, id) => {
   if (game.classList.contains("game-hidden")) {
     game.classList.add("game-transition");
     game.classList.remove("game-hidden");
+    document.querySelector(".author").classList.remove("display-none");
   }
   localStorage.setItem("player", nickname);
   localStorage.setItem("id", id);
@@ -69,8 +70,6 @@ const inputHandler = (errorEmpty, errorLong, errorExist, input, e) => {
 };
 
 export const generateRegistration = () => {
-  game.classList.add("game-hidden");
-
   document.body.insertAdjacentHTML("afterbegin", registration);
   const regButton = document.querySelector(".confirm-registration");
   const registerWrapper = document.querySelector(".register-wrapper");
@@ -78,6 +77,8 @@ export const generateRegistration = () => {
   const errorEmpty = document.querySelector(".nickname-error-empty");
   const errorLong = document.querySelector(".nickname-error-long");
   const errorExist = document.querySelector(".nickname-error-exist");
+
+  // game.classList.add("game-hidden");
 
   setTimeout(() => {
     game.classList.add("game-transition");

@@ -15,6 +15,7 @@ import {
   musicOff,
   tetrominos,
   colors,
+  game,
   gameAlert,
   linesScore,
   alertButton,
@@ -51,11 +52,14 @@ export function modifyRAF(value) {
 
 if (localStorage.getItem("id")) {
   RAF = requestAnimationFrame(gameLoop);
+  game.classList.remove("game-hidden");
 } else {
   generateRegistration();
 }
 
 export const theme = new Audio("../audio/theme.mp3");
+const lineSound = new Audio("../audio/line.mp3");
+lineSound.volume = 0.05;
 theme.loop = true;
 let musicStatus = localStorage.getItem("music");
 
@@ -247,6 +251,7 @@ const placeTetromino = () => {
     if (field[row].every((rowCell) => !!rowCell)) {
       rowsCounter++;
       updateLinesScore();
+      lineSound.play();
       for (let r = row; r >= 0; r--) {
         for (let c = 0; c < field[r].length; c++) {
           field[r][c] = field[r - 1][c];

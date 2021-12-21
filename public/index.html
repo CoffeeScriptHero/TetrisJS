@@ -38,7 +38,7 @@
 <svg class="svg svg-music-off svg-display-none">
     <use xlink:href="#svg2"></use>
 </svg>
-    <div class="game">
+    <div class="game game-hidden">
     <div class="main-canvas-wrapper">
       <div class="statisticsCanvas-wrapper">
         <canvas
@@ -97,6 +97,7 @@
       <p class="fumny_text">Phones..</p>
     </div>
     <script>
+      if (localStorage.getItem("id") == null) document.querySelector(".author").classList.add("display-none");
       const musicOn = document.querySelector(".svg-music-on");
       const musicOff = document.querySelector(".svg-music-off");
       const status = localStorage.getItem("music");
