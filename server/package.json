@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "nodemon index.js",
     "test": "npm begin",
-    "start": "node server.js"
+    "start": "npm start"
   },
   "author": "Denis Kozarenko",
   "license": "ISC",
