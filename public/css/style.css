@@ -9,7 +9,7 @@
   display: flex;
   width: fit-content;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 100px;
   opacity: 1;
 }
 .game-transition.game-hidden {
@@ -181,6 +181,8 @@
 .alert-button {
   display: block;
   margin: 0 auto;
+  margin-bottom: 10px;
+  margin-top: 0;
   font-family: "Press Start 2P";
   font-size: 10px;
   width: 135px;
@@ -190,7 +192,7 @@
   border: none;
 }
 .alert-button--mgtop {
-  margin-top: 35px;
+  margin-top: 30px;
 }
 .alert-button:active {
   transform: scale(0.98);
@@ -261,6 +263,8 @@
   display: block;
   fill: white;
   cursor: pointer;
+  position: absolute;
+  top: 5px;
   width: 36px;
   height: 36px;
 }
