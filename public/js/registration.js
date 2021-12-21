@@ -77,8 +77,6 @@ export const generateRegistration = () => {
   const errorLong = document.querySelector(".nickname-error-long");
   const errorExist = document.querySelector(".nickname-error-exist");
 
-  game.classList.add("game-hidden");
-
   setTimeout(() => {
     game.classList.add("game-transition");
   }, 2000);
