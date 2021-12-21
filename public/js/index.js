@@ -35,8 +35,6 @@ setTopScore();
 
 leaderboardHandler();
 
-if (screen.width <= 700) return;
-
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
 const cell = 32;
@@ -59,7 +57,7 @@ if (localStorage.getItem("id")) {
   RAF = requestAnimationFrame(gameLoop);
   game.classList.remove("game-hidden");
 } else {
-  generateRegistration();
+  if (screen.width >= 700) generateRegistration();
 }
 
 let musicStatus = localStorage.getItem("music");
