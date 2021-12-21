@@ -1,5 +1,6 @@
 import { getUsers } from "./serverFunctions.js";
 import {
+  clickSound,
   leaderboardBtn,
   leaderboard,
   leaderboardContent,
@@ -7,6 +8,7 @@ import {
 } from "./constants.js";
 
 const toggleLeaderboard = () => {
+  clickSound.play();
   leaderboardList.textContent = "";
   leaderboard.classList.toggle("display-none");
   const users = getUsers();

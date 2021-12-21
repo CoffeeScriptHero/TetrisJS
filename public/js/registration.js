@@ -1,5 +1,5 @@
-import { game, musicOn, clickSound } from "./constants.js";
-import { modifyRAF, gameLoop, theme } from "./index.js";
+import { game, musicOn, clickSound, theme } from "./constants.js";
+import { modifyRAF, gameLoop } from "./index.js";
 import { createUser } from "./serverFunctions.js";
 
 const isValidNickname = (nickname) => {

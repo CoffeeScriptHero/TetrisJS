@@ -11,6 +11,7 @@ import {
 
 import {
   customFont,
+  theme,
   lineSound,
   clickSound,
   musicOn,
@@ -59,9 +60,6 @@ if (localStorage.getItem("id")) {
   generateRegistration();
 }
 
-export const theme = new Audio("../audio/theme.mp3");
-
-theme.loop = true;
 let musicStatus = localStorage.getItem("music");
 
 if (musicStatus) {

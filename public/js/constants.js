@@ -51,10 +51,12 @@ export const customFont = new FontFace(
   "url(fonts/PressStart2P-Regular.otf)"
 );
 
+export const theme = new Audio("../audio/theme.mp3");
 export const lineSound = new Audio("../audio/line.mp3");
 export const clickSound = new Audio("../audio/click.mp3");
 lineSound.volume = 1;
 clickSound.volume = 1;
+theme.loop = true;
 
 export const game = document.querySelector(".game");
 export const musicOn = document.querySelector(".svg-music-on");
