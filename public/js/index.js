@@ -57,7 +57,7 @@ if (localStorage.getItem("id")) {
   RAF = requestAnimationFrame(gameLoop);
   game.classList.remove("game-hidden");
 } else {
-  if (screen.width > 1050) generateRegistration();
+  if (screen.width > 900) generateRegistration();
 }
 
 let musicStatus = localStorage.getItem("music");

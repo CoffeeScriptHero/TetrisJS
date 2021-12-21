@@ -68,7 +68,7 @@
   flex-direction: column;
   align-items: center;
 }
-@media (max-width: 1600px) {
+@media (max-width: 1500px) {
   .body {
     margin-top: 0;
   }
@@ -76,7 +76,7 @@
     margin-top: 0;
   }
 }
-@media (max-width: 1050px) {
+@media (max-width: 900px) {
   .game-wrapper {
     display: none;
   }
