@@ -11,6 +11,8 @@ import {
 
 import {
   customFont,
+  lineSound,
+  clickSound,
   musicOn,
   musicOff,
   tetrominos,
@@ -58,8 +60,7 @@ if (localStorage.getItem("id")) {
 }
 
 export const theme = new Audio("../audio/theme.mp3");
-const lineSound = new Audio("../audio/line.mp3");
-lineSound.volume = 0.05;
+
 theme.loop = true;
 let musicStatus = localStorage.getItem("music");
 
@@ -86,6 +87,7 @@ musicOn.addEventListener("click", swapButtons);
 musicOff.addEventListener("click", swapButtons);
 
 alertButton.addEventListener("click", () => {
+  clickSound.play();
   setTopScore();
   gameAlert.classList.add("display-none");
   alertButton.classList.add("alert-button--mgtop");

@@ -1,4 +1,4 @@
-import { game, musicOn } from "./constants.js";
+import { game, musicOn, clickSound } from "./constants.js";
 import { modifyRAF, gameLoop, theme } from "./index.js";
 import { createUser } from "./serverFunctions.js";
 
@@ -78,8 +78,6 @@ export const generateRegistration = () => {
   const errorLong = document.querySelector(".nickname-error-long");
   const errorExist = document.querySelector(".nickname-error-exist");
 
-  // game.classList.add("game-hidden");
-
   setTimeout(() => {
     game.classList.add("game-transition");
   }, 2000);
@@ -94,6 +92,7 @@ export const generateRegistration = () => {
   });
 
   regButton.addEventListener("click", (e) => {
+    clickSound.play();
     const result = isValidNickname(input.value);
     const nickname = input.value;
     const id = generateId();
