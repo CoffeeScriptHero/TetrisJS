@@ -12,6 +12,11 @@
   margin-top: 110px;
   opacity: 1;
 }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .game {
+    margin-top: 180px;
+  }
+}
 .game-transition.game-hidden {
   display: block;
   opacity: 0;
