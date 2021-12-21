@@ -69,6 +69,8 @@ const inputHandler = (errorEmpty, errorLong, errorExist, input, e) => {
 };
 
 export const generateRegistration = () => {
+  game.classList.add("game-hidden");
+
   document.body.insertAdjacentHTML("afterbegin", registration);
   const regButton = document.querySelector(".confirm-registration");
   const registerWrapper = document.querySelector(".register-wrapper");
