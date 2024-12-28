@@ -2,7 +2,7 @@ import { topScore } from "./constants.js";
 
 export const submitScore = async (data) => {
   const response = await fetch(
-    "https://young-ocean-67220.herokuapp.com/submit-score",
+    "https://tetris-3d6efada5e34.herokuapp.com/submit-score",
     {
       method: "POST",
       headers: {
@@ -16,7 +16,7 @@ export const submitScore = async (data) => {
 
 export const getTopScore = async (data) => {
   const response = await fetch(
-    "https://young-ocean-67220.herokuapp.com/get-top-score",
+    "https://tetris-3d6efada5e34.herokuapp.com/get-top-score",
     {
       method: "POST",
       headers: {
@@ -41,7 +41,7 @@ export const setTopScore = () => {
 
 export const createUser = async (data) => {
   const response = await fetch(
-    "https://young-ocean-67220.herokuapp.com/signup",
+    "https://tetris-3d6efada5e34.herokuapp.com/signup",
     {
       method: "POST",
       headers: {
@@ -55,7 +55,7 @@ export const createUser = async (data) => {
 
 export const getUsers = async () => {
   const response = await fetch(
-    "https://young-ocean-67220.herokuapp.com/get-users"
+    "https://tetris-3d6efada5e34.herokuapp.com/get-users"
   );
   return response.json();
 };
